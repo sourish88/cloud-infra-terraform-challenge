@@ -1,0 +1,25 @@
+version: '3'
+services:
+  exercise:
+    container_name: exercise
+    depends_on:
+      - localstack
+    environment:
+      - AWS_ACCESS_KEY=mock-key
+      - AWS_SECRET_ACCESS_KEY=mock-secret
+    image: formidable/terraform-sandbox:latest
+    network_mode: host
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./project:/aws"
+  localstack:
+    container_name: localstack
+    environment:
+      - SERVICES=serverless
+      - HOSTNAME_EXTERNAL=localstack
+      - HOSTNAME=localstack
+      - DATA_DIR=/tmp/exercise
+    image: localstack/localstack:0.11.5
+    ports:
+      - "4566:4566"
